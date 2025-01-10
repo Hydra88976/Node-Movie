@@ -10,8 +10,8 @@ const io = socketIo(server);
 const port = 3000;
 
 // Set up view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'ejs');
+//app.set('views', path.join(__dirname, 'views'));
 
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
@@ -26,7 +26,7 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/client', (req, res) => {
-    res.render('client', { videoUrl: null });
+    res.render('client.html', { videoUrl: null });
 });
 
 // Route to handle video URL submission
