@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            padding-top: 20px;
+        }
+        video {
+            max-width: 100%;
+            height: auto;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .control-buttons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Video Player Admin</h1>
+
+    <!-- Form to input video URL -->
+    <form action="/submit" method="POST">
+        <input type="text" name="videoUrl" placeholder="Enter video URL" required>
+        <button type="submit">OK</button>
+    </form>
+
+    <h2>Current Video</h2>
+
+      <% if (videoUrl) { %>
+        <video id="videoPlayer" controls>                                                                                                        <source src="<%= videoUrl %>" type="video/mp4">
+            Your browser does not support the video tag.                                                                                     </video>
+    <% } else { %>
+        <p>No video selected.</p>
+    <% } %>
+
+    <!-- Control Buttons for Admin -->
+    <div class="control-buttons">
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="seekBtn">Seek to 10s</button>
+    </div>
+
+    <!-- Add socket.io client script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Play the video when the "play" command is received
+        socket.on('play', () => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.play();
+            }
+        });
+
+        // Pause the video when the "pause" command is received
+        socket.on('pause', () => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.pause();
+            }
+        });
+
+        // Seek the video when the "seek" command is received
+        socket.on('seek', (time) => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.currentTime = time;
+            }
+        });
+
+
+        // Admin control buttons
+        document.getElementById('playBtn').addEventListener('click', () => {
+            socket.emit('play');
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            socket.emit('pause');
+        });
+
+        document.getElementById('seekBtn').addEventListener('click', () => {
+            socket.emit('seek', 10); // Seek to 10 seconds (for example)
+        });
+    </script>
+
+</body>
+</html>

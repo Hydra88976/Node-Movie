@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            padding-top: 20px;
+        }
+        video {
+            max-width: 100%;
+            height: auto;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;                                                                                                                     cursor: pointer;
+        }                                                                                                                                    .control-buttons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Video Player Client</h1>
+
+    <h2>Current Video</h2>
+    <video id="videoPlayer" controls>
+        <source id="videoSource" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+
+    <!-- Add socket.io client script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Listen for the 'videoUrl' event to update the video source
+        socket.on('videoUrl', (videoUrl) => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+
+            // Update the video source and load the video
+            videoSource.src = videoUrl;
+            videoPlayer.load(); // Load the new video
+        });
+
+        // Play the video when the "play" command is received
+        socket.on('play', () => {
+            //alert("play command");
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.play();
+            }
+        });
+
+        // Pause the video when the "pause" command is received
+        socket.on('pause', () => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.pause();
+            }
+        });
+
+        // Seek the video when the "seek" command is received
+        socket.on('seek', (time) => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoPlayer) {
+                videoPlayer.currentTime = time;
+            }
+        });
+
+    </script>
+
+</body>
+</html>
