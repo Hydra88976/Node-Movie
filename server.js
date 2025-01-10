@@ -18,12 +18,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files (optional for styling or assets)
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to render the admin page
-app.get('/admin', (req, res) => {
-    res.render('admin', { videoUrl: null });
-});
+//app.get('/admin', (req, res) => {
+  //  res.render('admin', { videoUrl: null });
+//});
 
 app.get('/client', (req, res) => {
     res.render('client.html', { videoUrl: null });
@@ -37,7 +37,7 @@ app.post('/submit', (req, res) => {
     io.emit('videoUrl', videoUrl);
 
     // Respond back to the admin page with the same URL
-    res.render('admin', { videoUrl: videoUrl });
+    res.render('./client.html', { videoUrl: videoUrl });
 });
 
 // Socket.io connection handler
