@@ -9,7 +9,7 @@
     "rewrites": [
         { 
             "source": "/(.*)", 
-            "destination": "/admin" 
+            "destination": "/admin.ejs" 
         }
     ]
 }
