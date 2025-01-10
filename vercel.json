@@ -11,5 +11,11 @@
         "src": "/(.*)",
         "dest": "/admin"
       }
+    ],
+    "rewrites": [
+        { 
+            "source": "/(.*)", 
+            "destination": "/admin" 
+        }
     ]
 }
